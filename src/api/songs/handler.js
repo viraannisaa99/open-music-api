@@ -3,27 +3,27 @@ const autoBind = require('auto-bind');
 class SongsHandler {
   constructor(service, validator) {
     this._service = service;
-    this._validator = validator; 
+    this._validator = validator;
 
-    autoBind(this); 
+    autoBind(this);
   }
 
   /**
-   * Kriteria 1: POST
+   * Kriteria 1: Menambahkan lagu
    * @param {*} payload
    * @param {*} h
    * @returns id
    */
   async postSongHandler({ payload }, h) {
     this._validator.validateSongPayload(payload);
-    // perbaikan dari submission 2
-    const songId = await this._service.addSong(payload); // title, year, performer, genre, duration
+
+    const songId = await this._service.addSong(payload); // perbaikan dari submission 2
 
     const response = h.response({
       status: 'success',
       message: 'Lagu berhasil ditambahkan',
       data: {
-        songId, // return id
+        songId,
       },
     });
     response.code(201);
@@ -31,7 +31,7 @@ class SongsHandler {
   }
 
   /**
-   * Kriteria 2 : API dapat menampilkan seluruh lagu
+   * Kriteria 2 : Menampilkan Seluruh
    * @returns songs
    */
   async getSongsHandler() {
@@ -51,8 +51,8 @@ class SongsHandler {
    * @param {*} h
    * @returns id
    */
-  async getSongByIdHandler(request, h) {
-    const { id } = request.params; // get id dari path parameter
+  async getSongByIdHandler(request) {
+    const { id } = request.params;
     const song = await this._service.getSongById(id);
 
     return {

@@ -15,11 +15,17 @@ class ErrorHandler {
       newResponse.code(response.statusCode);
       return newResponse;
 
-      // SERVER ERROR
+      // Error tidak terduga
     } else if (response instanceof Error) {
       const { statusCode, payload } = response.output;
       if (statusCode === 401) {
         return h.response(payload).code(401); // unauthorized
+      }
+      if (statusCode === 413) {
+        return h.response(payload).code(413); // entity max size
+      }
+      if (statusCode === 415) {
+        return h.response(payload).code(415); // unsupported media
       }
       const newResponse = h.response({
         status: 'error',

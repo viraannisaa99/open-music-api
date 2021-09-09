@@ -18,7 +18,6 @@
     "object-curly-newline": "off",
     "no-unused-vars": "off",
     "newline-per-chained-call": "off",
-    "no-multiple-empty-lines": "off",
     "no-trailing-spaces": "off"
   }
 }

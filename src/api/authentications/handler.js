@@ -13,7 +13,7 @@ class AuthenticationsHandler {
   /**
    * Kriteria 2: Menambahkan Authentication
    * @param {*} payload
-   * @param {*} h 
+   * @param {*} h
    * @returns acessToken, refreshToken
    */
   async postAuthenticationHandler({ payload }, h) {
@@ -25,7 +25,7 @@ class AuthenticationsHandler {
     const accessToken = this._tokenManager.generateAccessToken({ id });
     const refreshToken = this._tokenManager.generateRefreshToken({ id });
 
-    await this._authenticationsService.addRefreshToken(refreshToken); // save refresh token ke db
+    await this._authenticationsService.addRefreshToken(refreshToken);
 
     const response = h.response({
       status: 'success',
@@ -42,7 +42,7 @@ class AuthenticationsHandler {
   /**
    * Kriteria 3: Memperbarui Authentication (Refresh Token)
    * @param {*} payload
-   * @param {*} h 
+   * @param {*} h
    * @returns accessToken
    */
   async putAuthenticationHandler({ payload }) {
@@ -64,9 +64,9 @@ class AuthenticationsHandler {
 
   /**
    * Kriteria 4: Menghapus Authentication (Logout)
-   * @param {*} request 
-   * @param {*} h 
-   * @returns 
+   * @param {*} request
+   * @param {*} h
+   * @returns
    */
   async deleteAuthenticationHandler({ payload }) {
     this._validator.validateDeleteAuthenticationPayload(payload);

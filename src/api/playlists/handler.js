@@ -11,8 +11,8 @@ class PlaylistsHandler {
 
   /**
    * Kriteria 5: Menambahkan Playlist
-   * @param {*} request 
-   * @param {*} h 
+   * @param {*} request
+   * @param {*} h
    * @returns playlistId
    */
   async postPlaylistHandler(request, h) {
@@ -35,7 +35,7 @@ class PlaylistsHandler {
 
   /**
    * Kriteria 6: Melihat Daftar Playlist
-   * @param {*} request 
+   * @param {*} request
    * @returns playlists
    */
   async getPlaylistsHandler(request) {
@@ -52,15 +52,15 @@ class PlaylistsHandler {
 
   /**
    * Kriteria 7: Menghapus Playlist
-   * @param {*} request 
-   * @returns 
+   * @param {*} request
+   * @returns
    */
   async deletePlaylistByIdHandler(request) {
     const { playlistId } = request.params;
     const { id: credentialId } = request.auth.credentials;
 
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId); // hanya owner yang bisa menghapus
-    await this._playlistsService.deletePlaylistById(playlistId);
+    await this._playlistsService.deletePlaylistById(playlistId, credentialId);
 
     return {
       status: 'success',
@@ -70,9 +70,9 @@ class PlaylistsHandler {
 
   /**
    * Kriteria 8: Menambahkan Lagu ke Playlist
-   * @param {*} request 
-   * @param {*} h 
-   * @returns 
+   * @param {*} request
+   * @param {*} h
+   * @returns
    */
   async postSongToPlaylistHandler(request, h) {
     this._validator.validatePlaylistSongPayload(request.payload);
@@ -94,7 +94,7 @@ class PlaylistsHandler {
 
   /**
    * Kriteria 9: Melihat Daftar Lagu di Playlist
-   * @param {*} request 
+   * @param {*} request
    * @returns songs
    */
   async getPlaylistSongsHandler(request) {
@@ -114,8 +114,8 @@ class PlaylistsHandler {
 
   /**
    * Kriteria 10: Menghapus Lagu dari Playlist
-   * @param {*} request 
-   * @returns 
+   * @param {*} request
+   * @returns
    */
   async deletePlaylistSongsHandler(request) {
     const { playlistId } = request.params;

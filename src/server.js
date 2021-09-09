@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const Inert = require('@hapi/inert');
+const path = require('path');
 
 // songs
 const songs = require('./api/songs');
@@ -29,14 +31,29 @@ const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./services/postgres/CollaborationsService');
 const CollaborationsValidator = require('./validator/collaborations');
 
+// Exports
+const _exports = require('./api/exports');
+const ProducerService = require('./services/rabbitmq/ProducerServices');
+const ExportsValidator = require('./validator/exports');
+
+// uploads
+const uploads = require('./api/uploads');
+const StorageService = require('./services/storage/StorageService');
+const UploadsValidator = require('./validator/uploads');
+
+// cache
+const CacheService = require('./services/redis/CacheService');
+
 const errors = require('./api/errors');
 
 const init = async () => {
-  const songsService = new SongsService();
+  const cacheService = new CacheService();
+  const songsService = new SongsService(cacheService);
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
-  const collaborationsService = new CollaborationsService();
-  const playlistsService = new PlaylistsService(collaborationsService);
+  const collaborationsService = new CollaborationsService(cacheService);
+  const playlistsService = new PlaylistsService(collaborationsService, cacheService);
+  const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/pictures'));
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -53,9 +70,12 @@ const init = async () => {
     {
       plugin: Jwt,
     },
+    {
+      plugin: Inert,
+    },
   ]);
 
-  // mendefinisikan strategy autentikasi jwt
+  // mendefinisikan autentikasi jwt
   server.auth.strategy('songsapp_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {
@@ -74,7 +94,7 @@ const init = async () => {
 
   await server.register([
     {
-      plugin: errors, // mendaftarkan plugin error handler
+      plugin: errors,
     },
     {
       plugin: songs,
@@ -113,6 +133,21 @@ const init = async () => {
         collaborationsService,
         playlistsService,
         validator: CollaborationsValidator,
+      },
+    },
+    {
+      plugin: _exports,
+      options: {
+        service: ProducerService,
+        playlistsService,
+        validator: ExportsValidator,
+      },
+    },
+    {
+      plugin: uploads,
+      options: {
+        service: storageService,
+        validator: UploadsValidator,
       },
     },
   ]);
