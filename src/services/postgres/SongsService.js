@@ -91,6 +91,7 @@ class SongsService {
       throw new NotFoundError('Gagal menghapus lagu. Id tidak ditemukan');
     }
     await this._cacheService.delete(`songs:${id}`);
+    await this._cacheService.delete('songs:songList');
   }
 }
 
