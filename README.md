@@ -34,3 +34,34 @@ Dicoding Fundamental Back End Submission
 - RabbitMQ
 - Redis
 - Postman
+
+# .env
+
+# server configuration
+HOST=localhost
+
+PORT=5000
+ 
+# node-postgres configuration
+PGUSER=developer
+
+PGHOST=localhost
+
+PGPASSWORD= your postgreSQL passowrd
+
+PGDATABASE=songsapp
+
+PGPORT=5432
+
+# JWT Token
+ACCESS_TOKEN_KEY= 
+
+REFRESH_TOKEN_KEY=
+
+ACCESS_TOKEN_AGE=1800
+
+# Message broker
+RABBITMQ_SERVER=amqp://localhost
+
+# Redis
+REDIS_SERVER=localhost
