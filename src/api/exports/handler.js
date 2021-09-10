@@ -15,17 +15,17 @@ class ExportsHandler {
    * @param {*} h
    * @returns
    */
-  async postExportSongsHandler(request, h) {
-    this._validator.validateExportSongsPayload(request.payload);
+  async postExportSongsHandler({ payload, auth, params }, h) {
+    this._validator.validateExportSongsPayload(payload);
 
-    const { id: userId } = request.auth.credentials;
-    const { playlistId } = request.params;
+    const { id: userId } = auth.credentials;
+    const { playlistId } = params;
 
     await this._playlistsService.verifyPlaylistAccess(playlistId, userId);
 
     const message = {
       playlistId,
-      targetEmail: request.payload.targetEmail,
+      targetEmail: payload.targetEmail,
     };
 
     await this._service.sendMessage('export:songs', JSON.stringify(message));

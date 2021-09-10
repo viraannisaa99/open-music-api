@@ -51,8 +51,8 @@ class SongsHandler {
    * @param {*} h
    * @returns id
    */
-  async getSongByIdHandler(request) {
-    const { id } = request.params;
+  async getSongByIdHandler({ params }) {
+    const { id } = params;
     const song = await this._service.getSongById(id);
 
     return {
@@ -69,11 +69,11 @@ class SongsHandler {
    * @param {*} h
    * @returns id
    */
-  async putSongByIdHandler(request, h) {
-    this._validator.validateSongPayload(request.payload);
+  async putSongByIdHandler({ payload, params }, h) {
+    this._validator.validateSongPayload(payload);
 
-    const { id } = request.params;
-    await this._service.editSongById(id, request.payload);
+    const { id } = params;
+    await this._service.editSongById(id, payload);
     return {
       status: 'success',
       message: 'Lagu berhasil diperbarui',
@@ -86,8 +86,8 @@ class SongsHandler {
    * @param {*} h
    * @returns id
    */
-  async deleteSongByIdHandler(request, h) {
-    const { id } = request.params;
+  async deleteSongByIdHandler({ params }, h) {
+    const { id } = params;
     await this._service.deleteSongById(id);
     return {
       status: 'success',
