@@ -1,5 +1,7 @@
 # Open Music API
 
+![alt text](https://github.com/viraannisaa99/open-music-api/blob/main/sertifikat_course_271_1331362_090921122233_pages-to-jpg-0001.jpg?raw=true)
+
 Dicoding Fundamental Back End Submission
 
 # V1: 
